@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.media.Image;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 
@@ -26,4 +27,6 @@ public class MainActivity extends AppCompatActivity {
         Intent cameraIntent = new Intent(this, CameraActivity.class);
         startActivity(cameraIntent);
     }
+
+
 }

@@ -14,6 +14,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -22,14 +23,13 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Date;
 
+import static android.os.Environment.getExternalStoragePublicDirectory;
+
 public class CameraActivity extends AppCompatActivity {
 
 
     private Button takePictureButton;
     private ImageView imageView;
-    Uri file;
-    static final int REQUEST_IMAGE_CAPTURE = 1;
-    static final int REQUEST_TAKE_PHOTO = 1;
     String currentPhotoPath;
 
 
@@ -46,21 +46,15 @@ public class CameraActivity extends AppCompatActivity {
 
     /* Create a file for a taken image */
     private File createImageFile() throws IOException {
-        /* Use a public external picture directory; otherwise, all data gets lost once we uninstall the app */
-//        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
-//                Environment.DIRECTORY_PICTURES), "my_images");
-//
-//        if (!mediaStorageDir.exists()){
-//            if (!mediaStorageDir.mkdirs()){
-//                return null; // make the pictures directory 'Healogy' if it does not exist
-//            }
-//        }
-
 
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
-        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+
+
+        //File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File storageDir = getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES); // NOT SUPPORTED IN API LEVEL 29
+
         File image = File.createTempFile(
                 imageFileName,  /* prefix */
                 ".jpg",         /* suffix */
@@ -93,84 +87,39 @@ public class CameraActivity extends AppCompatActivity {
                 Uri photoURI = FileProvider.getUriForFile(this,
                         "com.example.mobileassignment2.fileprovider",
                         photoFile);
+                Log.d("status", "starting camera picture activity");
+
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+                startActivityForResult(takePictureIntent, 100);
+
             }
         }
-        finish();
+        //finish();
     }
 
 
+    private void galleryAddPic() {
+        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        File f = new File(currentPhotoPath);
+        Log.d("filename", f.toString());
+        Uri contentUri = Uri.fromFile(f);
+        mediaScanIntent.setData(contentUri);
+        this.sendBroadcast(mediaScanIntent);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        if (requestCode == 100){
+
+            Log.d("requestCode", Integer.toString(requestCode));
+            Log.d("resultCode", Integer.toString(resultCode));
+            galleryAddPic();
+
+        }
+        finish();
+        //Log.d("Intent data", data.getDataString());
+    }
 
 
-//
-//
-//    /* Request camera and storage permissions, and enable the camera button once we obtain them */
-//    @Override
-//    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-//
-//        // proper request
-//        if (requestCode == 0) {
-//            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED
-//                    && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-//
-//                // both sets of permissions enabled
-//                takePictureButton.setEnabled(true);
-//            }
-//        }
-//    }
-//
-//
-//    /* Create a File reference that we will use to save the image data */
-//    private static File getOutputMediaFile() {
-//
-//        /* Use a public external picture directory; otherwise, all data gets lost once we uninstall the app */
-//        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
-//                Environment.DIRECTORY_PICTURES), "Healogy");
-//
-//        if (!mediaStorageDir.exists()){
-//            if (!mediaStorageDir.mkdirs()){
-//                return null; // make the pictures directory 'Healogy' if it does not exist
-//            }
-//        }
-//
-//        String time = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()); // name images by their date and time
-//
-//        return new File(mediaStorageDir.getPath() + File.separator +
-//                "IMG_"+ time + ".jpg");
-//
-//    }
-//
-//
-//    public void takePicture(View view){
-//        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-////        file = Uri.fromFile(getOutputMediaFile()); // extract File URI
-////        intent.putExtra(MediaStore.EXTRA_OUTPUT, file);
-////
-////        startActivityForResult(intent, 100);
-//
-//        try {
-//            startActivityForResult(intent, 100);
-//        } catch (ActivityNotFoundException e) {
-//            // display error state to the user
-//        }
-//
-//
-//
-//    }
-//
-//    /* Populate the file with the member variable URI with the image data */
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        if (requestCode == 100){
-//            if (resultCode == RESULT_OK) {
-//                imageView.setImageURI(file);
-//
-//                // TODO: Analyze image with Azure
-//            }
-//        }
-//
-//    }
-    
 
 }
