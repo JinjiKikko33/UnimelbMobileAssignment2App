@@ -6,6 +6,7 @@ import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
 import android.Manifest;
+import android.app.IntentService;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -19,9 +20,25 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
 import java.io.File;
+import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
 import java.io.IOException;
 import java.util.Date;
+import com.microsoft.azure.cognitiveservices.vision.computervision.*;
+import com.microsoft.azure.cognitiveservices.vision.computervision.implementation.ComputerVisionImpl;
+import com.microsoft.azure.cognitiveservices.vision.computervision.models.*;
+
 
 import static android.os.Environment.getExternalStoragePublicDirectory;
 
@@ -94,7 +111,6 @@ public class CameraActivity extends AppCompatActivity {
 
             }
         }
-        //finish();
     }
 
 
@@ -107,6 +123,10 @@ public class CameraActivity extends AppCompatActivity {
         this.sendBroadcast(mediaScanIntent);
     }
 
+
+    /* Once we obtain the picture, it (filepath is returned to this activity.
+       Send it to Azure for classification
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
         if (requestCode == 100){
@@ -115,10 +135,50 @@ public class CameraActivity extends AppCompatActivity {
             Log.d("resultCode", Integer.toString(resultCode));
             galleryAddPic();
 
+            // send to Azure asynchronously
+            Intent serviceIntent = new Intent(this, ClassifyImageService.class);
+            serviceIntent.putExtra(ClassifyImageService.PARAM_FILE, currentPhotoPath);
+            startService(serviceIntent);
+
         }
         finish();
         //Log.d("Intent data", data.getDataString());
     }
+
+
+
+
+
+
+
+    // Analyze the image with the Azure Cognitive SDK
+//    private void analyzeImage(){
+//        String endpoint = getString(R.string.azure_cognitive_services_endpoint);
+//        String key = getString(R.string.azure_cognitive_services_key);
+//        String url = endpoint + "vision/v3.0/analyze";
+//
+//        RequestQueue queue = Volley.newRequestQueue(this);
+//
+//
+//        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+//                new Response.Listener<String>() {
+//                    @Override
+//                    public void onResponse(String response) {
+//                        // Display the first 500 characters of the response string.
+//                        Log.d("Response is: ", response);
+//                    }
+//                }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                Log.e("That didn't work!", error.toString());
+//            }
+//        });
+//
+//        queue.add(stringRequest);
+//
+//
+//
+//    }
 
 
 
