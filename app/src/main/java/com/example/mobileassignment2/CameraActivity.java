@@ -6,6 +6,7 @@ import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.IntentService;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
@@ -131,14 +132,18 @@ public class CameraActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
         if (requestCode == 100){
 
-            Log.d("requestCode", Integer.toString(requestCode));
-            Log.d("resultCode", Integer.toString(resultCode));
-            galleryAddPic();
+            if (resultCode == Activity.RESULT_OK){
+                Log.d("requestCode", Integer.toString(requestCode));
+                Log.d("resultCode", Integer.toString(resultCode));
+                galleryAddPic();
 
-            // send to Azure asynchronously
-            Intent serviceIntent = new Intent(this, ClassifyImageService.class);
-            serviceIntent.putExtra(ClassifyImageService.PARAM_FILE, currentPhotoPath);
-            startService(serviceIntent);
+                // send to Azure asynchronously
+                Intent serviceIntent = new Intent(this, ClassifyImageService.class);
+                serviceIntent.putExtra(ClassifyImageService.PARAM_FILE, currentPhotoPath);
+                startService(serviceIntent);
+
+            }
+
 
         }
         finish();
