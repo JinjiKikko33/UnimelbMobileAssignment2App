@@ -8,6 +8,7 @@ import android.media.Image;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -26,16 +27,19 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 /* Network operations must be done in the background. Call an intent service to connect to
         Azure Computer vision in the background
-     */
+   */
 public class ClassifyImageService extends IntentService {
 
 
@@ -67,9 +71,6 @@ public class ClassifyImageService extends IntentService {
         // analyse the image defined in current photopath
         File rawImage = new File(file);
         byte[] imageByteArray = Files.readAllBytes(rawImage.toPath());
-
-        // resize byte array
-
 
 
         List<VisualFeatureTypes> featuresToExtractFromLocalImage = new ArrayList<>();
@@ -132,23 +133,20 @@ public class ClassifyImageService extends IntentService {
                             String maxFood = classifiedFood[0];
                             String maxScore = classifiedFood[1];
 
-                            // Update the user's score in the database
-
 
                             // Notify the user how we have classified their food, and how many points they have earned
                             Toast toast;
 
                             if (maxFood.equals("None")){
                                 toast = Toast.makeText(getApplicationContext(), "Could not classify the food in your picture", Toast.LENGTH_LONG);
+                                toast.show();
 
                             } else {
-                                String userMessage = String.format("Classified food: %s \n You earned %s points!", maxFood, maxScore);
-                                toast = Toast.makeText(getApplicationContext(), userMessage, Toast.LENGTH_LONG);
+                                // TODO: Update the user's score in the database
+                                Log.d("making backend request: ", maxFood);
+                                updateUsersFoodLog(maxFood, maxScore);
 
                             }
-                            toast.show();
-
-
 
 
                         } catch (JSONException e) {
@@ -159,7 +157,7 @@ public class ClassifyImageService extends IntentService {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.d("Request error: ", error.toString()); // use toast
+                Toast.makeText(getApplicationContext(), "Could not reach the server", Toast.LENGTH_LONG);
             }
         });
 
@@ -169,6 +167,43 @@ public class ClassifyImageService extends IntentService {
 
     }
 
+    /*
+     * make an API call to update the user's food log once we have a food description, and a score
+     * a call to update the food log will generate a new row in the food_log table, with an food category id
+     * matching the food description the user provided
+     *
+     * a call to update the food log wil also update the user's daily score
+     *
+     */
+
+    private void updateUsersFoodLog(final String food, final String score){
+
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String url = "http://" + getString(R.string.host_name)
+                + String.format("/users/add-new-food-log-entry?item=%s&score=%s&email=%s", food, score, "john4@example.com");
+
+
+        Log.d("request url", url);
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+            new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    String userMessage = String.format("Classified food: %s \n You earned %s points!", food, score);
+                    Toast toast = Toast.makeText(getApplicationContext(), userMessage, Toast.LENGTH_LONG);
+                    toast.show();
+                    Log.d("Backend response: ", response);
+                }
+            }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("Backend response error: ", error.toString());
+
+            }
+        });
+
+        queue.add(stringRequest);
+
+    }
 
     /*
      * return the max scoring food label in a set of classified food labels, corresponding to the classifications for
