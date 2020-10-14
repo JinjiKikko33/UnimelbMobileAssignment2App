@@ -70,6 +70,12 @@ public class SignInActivity extends AppCompatActivity {
                 try {
                     // Google Sign In was successful, authenticate with Firebase
                     GoogleSignInAccount account = task.getResult(ApiException.class);
+
+                    // TODO: update new record in users database when the user logs in for the first time
+                    String email = account.getEmail();
+                    String name = account.getDisplayName();
+
+
                     Log.d("SignInActivity", "firebaseAuthWithGoogle:" + account.getId());
                     firebaseAuthWithGoogle(account.getIdToken());
                 } catch (ApiException e) {
