@@ -28,5 +28,10 @@ public class MainActivity extends AppCompatActivity {
         startActivity(cameraIntent);
     }
 
+    public void startLeaderboardIntent(View view){
+        Intent leaderboardIntent = new Intent(this, LeaderboardActivity.class);
+        startActivity(leaderboardIntent);
+    }
+
 
 }
