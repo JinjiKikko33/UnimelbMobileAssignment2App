@@ -5,8 +5,23 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /*
@@ -34,25 +49,59 @@ public class LeaderboardActivity extends AppCompatActivity {
 
 
         // fetch daily scores from the database
+        RequestQueue queue = Volley.newRequestQueue(this);
 
-        // dummy data
-        String[] data = {"hello0", "hello1", "hello2", "hello3"};
-        ArrayList<UserRank> ranks = new ArrayList<>();
-        UserRank a = new UserRank("John", 1, 10);
-        UserRank b = new UserRank("Bob", 2, 8);
-        UserRank c = new UserRank("Jane", 3, 2);
+        String url = "http://" + getString(R.string.host_name) + "/users/get-all-users-scores";
+        JsonArrayRequest jsonRequest =  new JsonArrayRequest
+                (Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        Log.d("JSON Response", String.valueOf(response));
+                        ArrayList<UserRank> ranks = processScoreArray(response);
+
+                        mAdapter = new LeaderboardAdapter(ranks);
+                        recyclerView.setAdapter(mAdapter);
+
+                        // iterate through the score results, and create UserRank objects
 
 
-        ranks.add(a);
-        ranks.add(b);
-        ranks.add(c);
+                    }
+                }, new Response.ErrorListener() {
 
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // TODO: Handle error
+                        Log.d("Backend response error", error.toString());
 
+                    }
+                });
 
-        mAdapter = new LeaderboardAdapter(ranks);
-        recyclerView.setAdapter(mAdapter);
+        queue.add(jsonRequest);
 
 
     }
+
+    private ArrayList<UserRank> processScoreArray(JSONArray array){
+        ArrayList<UserRank> ranks = new ArrayList<>();
+        for (int i = 0; i < array.length(); i++){
+            try {
+                JSONObject j = array.getJSONObject(i);
+                String username = j.getString("name");
+                int points = j.getInt("score");
+                int rank = i + 1;
+
+                UserRank userRank = new UserRank(username, rank, points);
+                ranks.add(userRank);
+
+
+
+            } catch (JSONException e) {
+                continue;
+            }
+        }
+        return ranks;
+    }
+
 }
 

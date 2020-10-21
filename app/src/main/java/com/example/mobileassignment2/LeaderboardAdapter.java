@@ -76,10 +76,6 @@ public class LeaderboardAdapter extends RecyclerView.Adapter<LeaderboardAdapter.
         TextView rankView = holder.rankTextView;
         TextView pointsView = holder.pointsTextView;
 
-
-        Log.d("name", rank.getName());
-        Log.d("rank", String.valueOf(rank.getRank()));
-
         nameView.setText(rank.getName());
         rankView.setText(Integer.toString(rank.getRank()));
         pointsView.setText(Integer.toString(rank.getPoints()));
