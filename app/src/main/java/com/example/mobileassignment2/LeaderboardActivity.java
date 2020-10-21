@@ -32,7 +32,8 @@ public class LeaderboardActivity extends AppCompatActivity {
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
-        // specify an adapter (see also next example)
+
+        // fetch daily scores from the database
 
         // dummy data
         String[] data = {"hello0", "hello1", "hello2", "hello3"};
@@ -41,33 +42,10 @@ public class LeaderboardActivity extends AppCompatActivity {
         UserRank b = new UserRank("Bob", 2, 8);
         UserRank c = new UserRank("Jane", 3, 2);
 
-        UserRank d = new UserRank("Jane", 4, 2);
-
-        UserRank e = new UserRank("Jane", 5, 2);
-
-        UserRank f = new UserRank("Jane", 6, 2);
-
-        UserRank g = new UserRank("Jane", 7, 2);
-        UserRank h = new UserRank("Jane", 8, 2);
-
-        UserRank i = new UserRank("Jane", 9, 2);
-
-        UserRank j = new UserRank("Jane", 10, 2);
-
-        UserRank k = new UserRank("Jane", 11, 2);
-
 
         ranks.add(a);
         ranks.add(b);
         ranks.add(c);
-        ranks.add(d);
-        ranks.add(e);
-        ranks.add(f);
-        ranks.add(g);
-        ranks.add(h);
-        ranks.add(i);
-        ranks.add(j);
-        ranks.add(k);
 
 
 
