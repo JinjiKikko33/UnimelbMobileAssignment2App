@@ -5,11 +5,16 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -75,18 +80,48 @@ public class SignInActivity extends AppCompatActivity {
                     String email = account.getEmail();
                     String name = account.getDisplayName();
 
+                    Log.d("email:", email);
+                    Log.d("name:", name);
+
+                    //CheckUserExistsAndAddUserToDatabase(email, name);
+
 
                     Log.d("SignInActivity", "firebaseAuthWithGoogle:" + account.getId());
                     firebaseAuthWithGoogle(account.getIdToken());
                 } catch (ApiException e) {
                     // Google Sign In failed, update UI appropriately
-                    Log.w("SignInActivity", "Google sign in failed", e);
+                    Log.d("SignInActivity", "Google sign in failed", e);
                 }
             } else {
-                Log.w("SignInActivity", exception.toString());
+                Log.d("SignInActivityException", exception.toString());
             }
 
         }
+    }
+
+    private void CheckUserExistsAndAddUserToDatabase(String email, String name){
+        String url = "http://" + getString(R.string.host_name)
+                + String.format("/users/create?email=%s&name=%s", email, name);
+
+        Log.d("request url", url);
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        String userMessage = response;
+                        Toast toast = Toast.makeText(getApplicationContext(), userMessage, Toast.LENGTH_LONG);
+                        toast.show();
+                        Log.d("Backend response: ", response);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("Backend response error: ", error.toString());
+            }
+        });
+
+
     }
 
     private void firebaseAuthWithGoogle(String idToken) {
