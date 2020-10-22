@@ -7,4 +7,5 @@
     <string name="email_address">Email address</string>
     <string name="sign_out">Sign out</string>
     <string name="host_name">192.168.0.198:3000</string>
+    <string name="azure_host">52.189.254.126:3000</string>
 </resources>

@@ -19,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mAuth = FirebaseAuth.getInstance();
+        //mAuth.signOut();
         final FirebaseUser currentUser = mAuth.getCurrentUser();
 
         /**If user is not authenticated, send him to SignInActivity to authenticate first.
