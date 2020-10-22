@@ -1,6 +1,14 @@
 <resources>
-    <string name="app_name">MobileAssignment2</string>
+    <string name="app_name">TestApp</string>
+    <string name="sign_in_with_google">Sign in With Google</string>
+    <string name="example">Example</string>
+    <string name="id">ID</string>
+    <string name="name">Name</string>
+    <string name="email_address">Email address</string>
+    <string name="sign_out">Sign out</string>
+    <string name="host_name">192.168.0.198:3000</string>
+    <string name="azure_host">52.189.254.126:3000</string>
     <string name="azure_cognitive_services_key">86c674f8fd0e440898b945c554a2c449</string>
     <string name="azure_cognitive_services_endpoint">https://food-classification.cognitiveservices.azure.com/</string>
-    <string name="host_name">192.168.0.198:3000</string>
+    <string name="title_activity_leaderboard">LeaderboardActivity</string>
 </resources>
