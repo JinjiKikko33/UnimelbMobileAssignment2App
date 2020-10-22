@@ -15,6 +15,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.microsoft.azure.cognitiveservices.vision.computervision.ComputerVisionClient;
 import com.microsoft.azure.cognitiveservices.vision.computervision.ComputerVisionManager;
 import com.microsoft.azure.cognitiveservices.vision.computervision.models.Category;
@@ -45,6 +47,9 @@ public class ClassifyImageService extends IntentService {
 
     static final String PARAM_FILE = "file";
     HashSet<String> categories;
+    private FirebaseAuth mAuth;
+    private FirebaseUser currentUser;
+
 
     public ClassifyImageService(){
         super("ClassifyImageService");
@@ -55,6 +60,8 @@ public class ClassifyImageService extends IntentService {
     protected  void onHandleIntent(Intent workIntent){
         String file = workIntent.getStringExtra(ClassifyImageService.PARAM_FILE);
         try {
+            mAuth = FirebaseAuth.getInstance();
+            currentUser = mAuth.getCurrentUser();
             analyzeImage(file);
 
         } catch (IOException e){
@@ -89,8 +96,6 @@ public class ClassifyImageService extends IntentService {
         for (ImageTag tag : analysis.tags()) {
             System.out.printf("\'%s\' with confidence %f\n", tag.name(), tag.confidence());
             categories.add(tag.name());
-
-
         }
 
 
@@ -178,9 +183,10 @@ public class ClassifyImageService extends IntentService {
 
     private void updateUsersFoodLog(final String food, final String score){
 
+        String email = currentUser.getEmail();
         RequestQueue queue = Volley.newRequestQueue(this);
         String url = "http://" + getString(R.string.host_name)
-                + String.format("/users/add-new-food-log-entry?item=%s&score=%s&email=%s", food, score, "john4@example.com");
+                + String.format("/users/add-new-food-log-entry?item=%s&score=%s&email=%s", food, score, email);
 
 
         Log.d("request url", url);
@@ -191,12 +197,12 @@ public class ClassifyImageService extends IntentService {
                     String userMessage = String.format("Classified food: %s \n You earned %s points!", food, score);
                     Toast toast = Toast.makeText(getApplicationContext(), userMessage, Toast.LENGTH_LONG);
                     toast.show();
-                    Log.d("Backend response: ", response);
+                    //Log.d("Backend response: ", response);
                 }
             }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.d("Backend response error: ", error.toString());
+                //Log.d("Backend response error: ", error.toString());
 
             }
         });
@@ -235,7 +241,11 @@ public class ClassifyImageService extends IntentService {
     }
 
 
-
+    /*
+     * A data class to store the food item's labels, database ID, and score, when we retrieve food
+     * categories from the database.
+     *
+     */
     public class FoodCategoryResultSet {
     String description;
     int id;
