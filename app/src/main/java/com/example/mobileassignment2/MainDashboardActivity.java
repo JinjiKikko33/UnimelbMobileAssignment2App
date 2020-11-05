@@ -3,16 +3,21 @@ package com.example.mobileassignment2;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.Image;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.io.InputStream;
 import java.time.LocalDate;
 
 
@@ -22,6 +27,7 @@ public class MainDashboardActivity extends AppCompatActivity {
         ImageButton cameraButton;
         TextView today;
         TextView name;
+        ImageView imageUserIcon;
         String username;
         private FirebaseAuth mAuth;
 
@@ -37,6 +43,7 @@ public class MainDashboardActivity extends AppCompatActivity {
             cameraButton = findViewById(R.id.cameraButton);
             today = findViewById(R.id.text_today);
             name = findViewById(R.id.text_name);
+            imageUserIcon = findViewById(R.id.image_user_icon);
 
             // get the date and set it on the dashboard
 
@@ -61,9 +68,11 @@ public class MainDashboardActivity extends AppCompatActivity {
         }
         name.setText(userWelcome);
 
+        // set the user's profile picture by downloading it
+        String imageUrl = currentUser.getPhotoUrl().toString();
+        new DownloadImageTask(imageUserIcon).execute(imageUrl);
 
-//        Intent cameraIntent = new Intent(this, CameraActivity.class);
-//        startActivity(cameraIntent);
+
         }
 
         public void startCameraIntent(View view){
@@ -72,6 +81,33 @@ public class MainDashboardActivity extends AppCompatActivity {
         }
 
 
+        private class DownloadImageTask extends AsyncTask<String, Void, Bitmap>{
+        ImageView userImage;
+
+            public DownloadImageTask(ImageView userImage){
+                this.userImage = userImage;
+            }
+
+            @Override
+            protected Bitmap doInBackground(String... urls) {
+                String urldisplay = urls[0];
+                Bitmap icon = null;
+                try {
+                    InputStream in = new java.net.URL(urldisplay).openStream();
+                    icon = BitmapFactory.decodeStream(in);
+
+                } catch (Exception e){
+                    Log.e("Error", e.getMessage());
+
+                }
+                return icon;
+            }
+
+            @Override
+            protected void onPostExecute(Bitmap result) {
+                userImage.setImageBitmap(result);
+            }
+        }
 
 
     }
