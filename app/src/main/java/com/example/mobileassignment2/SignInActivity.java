@@ -139,12 +139,15 @@ public class SignInActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d("SignInActivity", "signInWithCredential:success");
-                            Intent intent = new Intent(SignInActivity.this, DashboardActivity.class);
+                            Intent intent = new Intent(SignInActivity.this, MainDashboardActivity.class);
                             startActivity(intent);
                             finish();
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w("SignInActivity", "signInWithCredential:failure", task.getException());
+                            String userMessage = "Error, we were unable to sign you in.";
+                            Toast toast = Toast.makeText(getApplicationContext(), userMessage, Toast.LENGTH_LONG);
+                            toast.show();
                         }
                     }
                 });

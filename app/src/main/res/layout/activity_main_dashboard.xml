@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".MainDashboardActivity">
 
 
     <ScrollView
@@ -77,10 +77,10 @@
                     android:paddingRight="6dp">
 
                     <TextView
+                        android:id="@+id/text_name"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:text="Hi, Kitty"
                         android:textSize="30sp"
                         android:textColor="@color/White"
                         android:gravity="bottom"/>

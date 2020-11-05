@@ -37,11 +37,11 @@ public class MainActivity extends AppCompatActivity {
                     // get the user's email and display name
                     //String email = currentUser.getEmail();
                     //String name = currentUser.getDisplayName();
-                    Intent cameraDashBoardIntent = new Intent(MainActivity.this, CameraLeaderBoardDashboardActivity.class);
-
+                    //Intent cameraDashBoardIntent = new Intent(MainActivity.this, CameraLeaderBoardDashboardActivity.class);
+                    Intent mainDashboardIntent = new Intent(MainActivity.this, MainDashboardActivity.class);
 
                     // TODO: start Lishu's homepage activity, and add the user's name and email as Intent extras
-                    startActivity(cameraDashBoardIntent);
+                    startActivity(mainDashboardIntent);
                     finish();
                 } else {
                     Intent signInIntent = new Intent(MainActivity.this, SignInActivity.class);
