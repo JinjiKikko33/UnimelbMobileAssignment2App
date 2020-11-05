@@ -85,10 +85,10 @@
                         android:textColor="@color/White"
                         android:gravity="bottom"/>
                     <TextView
+                        android:id="@+id/text_days"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:text="This is Your 600 Day"
                         android:textSize="20sp"
                         android:textColor="@color/White"/>
 
