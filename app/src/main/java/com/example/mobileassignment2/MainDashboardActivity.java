@@ -25,6 +25,7 @@ import com.android.volley.toolbox.Volley;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -32,6 +33,7 @@ import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
@@ -42,6 +44,7 @@ public class MainDashboardActivity extends AppCompatActivity {
         TextView today;
         TextView name;
         TextView days;
+        TextView score;
         ImageView imageUserIcon;
         String username;
         private FirebaseAuth mAuth;
@@ -60,6 +63,7 @@ public class MainDashboardActivity extends AppCompatActivity {
             name = findViewById(R.id.text_name);
             imageUserIcon = findViewById(R.id.image_user_icon);
             days = findViewById(R.id.text_days);
+            score = findViewById(R.id.text_score);
 
             // get the date and set it on the dashboard
 
@@ -90,6 +94,9 @@ public class MainDashboardActivity extends AppCompatActivity {
 
         // get the date the user joined us and calculate the number of days since then
         updateTodayDate(days, currentUser.getEmail());
+
+        // get the users current score, and render it on the textView for score
+        updateScore(score, currentUser.getEmail());
 
 
 
@@ -140,6 +147,39 @@ public class MainDashboardActivity extends AppCompatActivity {
 
         }
 
+        public void updateScore(final TextView score, String email){
+            RequestQueue queue = Volley.newRequestQueue(this);
+            String url = "http://" + getString(R.string.host_name) + "/users/get-current-score?email=" + email;
+
+            JsonArrayRequest jsonRequest =  new JsonArrayRequest
+                    (Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+
+                        @Override
+                        public void onResponse(JSONArray response) {
+                            try {
+                                JSONObject j = response.getJSONObject(0);
+                                String currentScore = Integer.toString(j.getInt("score")) + " pts";
+                                score.setText(currentScore);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                return;
+                            }
+
+
+                        }
+                    }, new Response.ErrorListener() {
+
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            // TODO: Handle error
+                            Log.d("Backend response error", error.toString());
+
+                        }
+                    });
+            queue.add(jsonRequest);
+
+
+        }
 
     private class DownloadImageTask extends AsyncTask<String, Void, Bitmap>{
         ImageView userImage;
