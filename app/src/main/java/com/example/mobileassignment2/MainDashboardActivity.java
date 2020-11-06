@@ -45,6 +45,7 @@ public class MainDashboardActivity extends AppCompatActivity {
         TextView name;
         TextView days;
         TextView score;
+        TextView steps;
         ImageView imageUserIcon;
         String username;
         private FirebaseAuth mAuth;
@@ -64,6 +65,7 @@ public class MainDashboardActivity extends AppCompatActivity {
             imageUserIcon = findViewById(R.id.image_user_icon);
             days = findViewById(R.id.text_days);
             score = findViewById(R.id.text_score);
+            steps = findViewById(R.id.text_step);
 
             // get the date and set it on the dashboard
 
@@ -98,6 +100,8 @@ public class MainDashboardActivity extends AppCompatActivity {
         // get the users current score, and render it on the textView for score
         updateScore(score, currentUser.getEmail());
 
+        // get the users current step count for today, and reender it on the textView for step_count
+        updateStepCount(steps, currentUser.getEmail());
 
 
         }
@@ -110,7 +114,6 @@ public class MainDashboardActivity extends AppCompatActivity {
         public void updateTodayDate(final TextView days, String email) {
             RequestQueue queue = Volley.newRequestQueue(this);
             String url = "http://" + getString(R.string.host_name) + "/users/date-joined/?email=" + email;
-
 
             JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
                 @Override
@@ -147,11 +150,45 @@ public class MainDashboardActivity extends AppCompatActivity {
 
         }
 
+        public void updateStepCount(final TextView steps, String email){
+            RequestQueue queue = Volley.newRequestQueue(this);
+            String url = "http://" + getString(R.string.host_name) + "/users/get-user-step-counts?email=" + email;
+
+            JsonArrayRequest request =  new JsonArrayRequest
+                    (Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+
+                        @Override
+                        public void onResponse(JSONArray response) {
+                            try {
+                                JSONObject j = response.getJSONObject(0);
+                                String currentScore = Integer.toString(j.getInt("step_count")) + " steps today";
+                                steps.setText(currentScore);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                return;
+                            }
+
+
+                        }
+                    }, new Response.ErrorListener() {
+
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            // TODO: Handle error
+                            Log.d("Backend response error", error.toString());
+
+                        }
+                    });
+            queue.add(request);
+
+
+        }
+
         public void updateScore(final TextView score, String email){
             RequestQueue queue = Volley.newRequestQueue(this);
             String url = "http://" + getString(R.string.host_name) + "/users/get-current-score?email=" + email;
 
-            JsonArrayRequest jsonRequest =  new JsonArrayRequest
+            JsonArrayRequest request =  new JsonArrayRequest
                     (Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
 
                         @Override
@@ -176,10 +213,11 @@ public class MainDashboardActivity extends AppCompatActivity {
 
                         }
                     });
-            queue.add(jsonRequest);
-
+            queue.add(request);
 
         }
+
+
 
     private class DownloadImageTask extends AsyncTask<String, Void, Bitmap>{
         ImageView userImage;
