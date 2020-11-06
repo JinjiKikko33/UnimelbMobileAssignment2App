@@ -9,7 +9,8 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        >
         <LinearLayout
             android:id="@+id/text_home"
             android:layout_width="match_parent"
@@ -185,16 +186,17 @@
                 android:background="@color/White"
                 android:layout_height="match_parent"
                 android:layout_weight="1">
+
                 <TextView
                     android:id="@+id/text_week_record_bar"
                     android:layout_width="match_parent"
-                    android:layout_height="60dp"
+                    android:layout_height="66dp"
+                    android:background="@color/LightGreen"
                     android:gravity="center_vertical"
                     android:paddingLeft="12dp"
                     android:paddingRight="6dp"
-                    android:textColor="#212122"
                     android:text="My Week"
-                    android:background="@color/LightGreen"
+                    android:textColor="#212122"
                     android:textSize="24sp" />
                 <TextView
                     android:layout_width="match_parent"
@@ -208,10 +210,35 @@
                     android:background="@color/White"
                     android:textSize="24sp" />
 
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/layout_leaderboard"
+                android:layout_width="match_parent"
+                android:layout_marginTop="10dp"
+                android:background="@color/DeepGreen"
+                android:orientation="vertical"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:text="View Leaderboard"
+                    android:layout_height="60dp"
+                    android:gravity="center_vertical"
+                    android:onClick="startLeaderBoardIntent"
+                    android:paddingLeft="12dp"
+                    android:paddingRight="6dp">
+
+                </Button>
+
+
 
 
 
             </LinearLayout>
+
+
+
 
         </LinearLayout>
     </ScrollView>

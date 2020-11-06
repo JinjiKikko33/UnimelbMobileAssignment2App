@@ -111,7 +111,12 @@ public class MainDashboardActivity extends AppCompatActivity {
             startActivity(cameraIntent);
         }
 
-        public void updateTodayDate(final TextView days, String email) {
+        public void startLeaderBoardIntent(View view) {
+            Intent leaderboardIntent = new Intent(this, LeaderboardActivity.class);
+            startActivity(leaderboardIntent);
+        }
+
+        private void updateTodayDate(final TextView days, String email) {
             RequestQueue queue = Volley.newRequestQueue(this);
             String url = "http://" + getString(R.string.host_name) + "/users/date-joined/?email=" + email;
 
@@ -150,7 +155,7 @@ public class MainDashboardActivity extends AppCompatActivity {
 
         }
 
-        public void updateStepCount(final TextView steps, String email){
+        private void updateStepCount(final TextView steps, String email){
             RequestQueue queue = Volley.newRequestQueue(this);
             String url = "http://" + getString(R.string.host_name) + "/users/get-user-step-counts?email=" + email;
 
@@ -184,7 +189,7 @@ public class MainDashboardActivity extends AppCompatActivity {
 
         }
 
-        public void updateScore(final TextView score, String email){
+        private void updateScore(final TextView score, String email){
             RequestQueue queue = Volley.newRequestQueue(this);
             String url = "http://" + getString(R.string.host_name) + "/users/get-current-score?email=" + email;
 
