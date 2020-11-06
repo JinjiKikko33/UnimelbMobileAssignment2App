@@ -19,7 +19,7 @@ public class UserRank {
     }
 
 
-    public UserRank(String name, int rank, int points){
+    public UserRank(String name, int rank, int points) {
         this.rank = rank;
         this.name = name;
         this.points = points;

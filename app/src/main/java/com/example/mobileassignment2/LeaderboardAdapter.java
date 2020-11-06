@@ -46,7 +46,7 @@ public class LeaderboardAdapter extends RecyclerView.Adapter<LeaderboardAdapter.
     }
 
     // store the data for the adapter, used to inject into a view
-    public LeaderboardAdapter(List<UserRank> data){
+    public LeaderboardAdapter(List<UserRank> data) {
         ranks = data;
     }
 
@@ -79,7 +79,6 @@ public class LeaderboardAdapter extends RecyclerView.Adapter<LeaderboardAdapter.
         nameView.setText(rank.getName());
         rankView.setText(Integer.toString(rank.getRank()));
         pointsView.setText(Integer.toString(rank.getPoints()));
-
 
 
     }

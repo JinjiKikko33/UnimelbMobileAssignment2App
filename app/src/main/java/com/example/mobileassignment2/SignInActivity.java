@@ -101,7 +101,7 @@ public class SignInActivity extends AppCompatActivity {
         }
     }
 
-    private void CheckUserExistsAndAddUserToDatabase(String email, String name){
+    private void CheckUserExistsAndAddUserToDatabase(String email, String name) {
 
         RequestQueue queue = Volley.newRequestQueue(this);
         String url = "http://" + getString(R.string.host_name)
