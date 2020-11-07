@@ -10,6 +10,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -41,6 +42,7 @@ import java.util.Locale;
 public class MainDashboardActivity extends AppCompatActivity {
 
     ImageButton cameraButton;
+    Button signout_button;
     TextView today;
     TextView name;
     TextView days;
@@ -61,6 +63,7 @@ public class MainDashboardActivity extends AppCompatActivity {
         final FirebaseUser currentUser = mAuth.getCurrentUser();
 
         cameraButton = findViewById(R.id.cameraButton);
+        signout_button = findViewById(R.id.signout_button);
         today = findViewById(R.id.text_today);
         name = findViewById(R.id.text_name);
         imageUserIcon = findViewById(R.id.image_user_icon);
@@ -117,14 +120,18 @@ public class MainDashboardActivity extends AppCompatActivity {
         startActivity(leaderboardIntent);
     }
 
-    public void startChartActivityIntent(View view){
+    public void startChartActivityIntent(View view) {
         Intent chartIntent = new Intent(this, HistoryChartActivity.class);
         startActivity(chartIntent);
     }
 
-    public void startStepCounterActvityIntent(View view){
+    public void startStepCounterActvityIntent(View view) {
         Intent stepIntent = new Intent(this, StepCounterActivity.class);
         startActivity(stepIntent);
+    }
+
+    public void signout_onclick(View view) {
+        mAuth.signOut();
     }
 
 
@@ -185,7 +192,7 @@ public class MainDashboardActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONArray response) {
                         try {
-                            if (response.length() == 0){
+                            if (response.length() == 0) {
                                 String currentScore = " 0 steps today";
                                 steps.setText(currentScore);
                             }
@@ -227,11 +234,10 @@ public class MainDashboardActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONArray response) {
                         try {
-                            if (response.length() == 0){
+                            if (response.length() == 0) {
                                 String currentScore = "0 pts";
                                 score.setText(currentScore);
-                            }
-                            else {
+                            } else {
                                 JSONObject j = response.getJSONObject(0);
                                 String currentScore = Integer.toString(j.getInt("score")) + " pts";
                                 score.setText(currentScore);
@@ -256,7 +262,6 @@ public class MainDashboardActivity extends AppCompatActivity {
         queue.add(request);
 
     }
-
 
 
     /*
