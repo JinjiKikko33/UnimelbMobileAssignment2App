@@ -51,25 +51,25 @@ public class ClassifyImageService extends IntentService {
     private FirebaseUser currentUser;
 
 
-    public ClassifyImageService(){
+    public ClassifyImageService() {
         super("ClassifyImageService");
     }
 
 
     @Override
-    protected  void onHandleIntent(Intent workIntent){
+    protected void onHandleIntent(Intent workIntent) {
         String file = workIntent.getStringExtra(ClassifyImageService.PARAM_FILE);
         try {
             mAuth = FirebaseAuth.getInstance();
             currentUser = mAuth.getCurrentUser();
             analyzeImage(file);
 
-        } catch (IOException e){
+        } catch (IOException e) {
             Log.e("IOERROR", e.toString());
         }
     }
 
-    private void analyzeImage(String file) throws IOException{
+    private void analyzeImage(String file) throws IOException {
         String endpoint = getString(R.string.azure_cognitive_services_endpoint);
         String key = getString(R.string.azure_cognitive_services_key);
 
@@ -142,7 +142,7 @@ public class ClassifyImageService extends IntentService {
                             // Notify the user how we have classified their food, and how many points they have earned
                             Toast toast;
 
-                            if (maxFood.equals("None")){
+                            if (maxFood.equals("None")) {
                                 toast = Toast.makeText(getApplicationContext(), "Could not classify the food in your picture", Toast.LENGTH_LONG);
                                 toast.show();
 
@@ -169,7 +169,6 @@ public class ClassifyImageService extends IntentService {
         queue.add(stringRequest);
 
 
-
     }
 
     /*
@@ -181,7 +180,7 @@ public class ClassifyImageService extends IntentService {
      *
      */
 
-    private void updateUsersFoodLog(final String food, final String score){
+    private void updateUsersFoodLog(final String food, final String score) {
 
         String email = currentUser.getEmail();
         RequestQueue queue = Volley.newRequestQueue(this);
@@ -191,15 +190,15 @@ public class ClassifyImageService extends IntentService {
 
         Log.d("request url", url);
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
-            new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
-                    String userMessage = String.format("Classified food: %s \n You earned %s points!", food, score);
-                    Toast toast = Toast.makeText(getApplicationContext(), userMessage, Toast.LENGTH_LONG);
-                    toast.show();
-                    //Log.d("Backend response: ", response);
-                }
-            }, new Response.ErrorListener() {
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        String userMessage = String.format("Classified food: %s \n You earned %s points!", food, score);
+                        Toast toast = Toast.makeText(getApplicationContext(), userMessage, Toast.LENGTH_LONG);
+                        toast.show();
+                        //Log.d("Backend response: ", response);
+                    }
+                }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 //Log.d("Backend response error: ", error.toString());
@@ -235,7 +234,7 @@ public class ClassifyImageService extends IntentService {
         }
 
 
-    return new String[] {classifiedFoodLabel, Integer.toString(classifiedScore)};
+        return new String[]{classifiedFoodLabel, Integer.toString(classifiedScore)};
 
 
     }
@@ -247,15 +246,15 @@ public class ClassifyImageService extends IntentService {
      *
      */
     public class FoodCategoryResultSet {
-    String description;
-    int id;
-    int score;
+        String description;
+        int id;
+        int score;
 
-    public FoodCategoryResultSet(String description, int id, int score){
-        this.description = description;
-        this.id = id;
-        this.score = score;
-    }
+        public FoodCategoryResultSet(String description, int id, int score) {
+            this.description = description;
+            this.id = id;
+            this.score = score;
+        }
 
         public String getDescription() {
             return description;

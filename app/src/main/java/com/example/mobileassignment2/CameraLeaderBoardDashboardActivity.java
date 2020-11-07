@@ -10,6 +10,7 @@ import android.widget.ImageButton;
 public class CameraLeaderBoardDashboardActivity extends AppCompatActivity {
 
     ImageButton cameraButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -21,12 +22,12 @@ public class CameraLeaderBoardDashboardActivity extends AppCompatActivity {
 //        startActivity(cameraIntent);
     }
 
-    public void startCameraIntent(View view){
+    public void startCameraIntent(View view) {
         Intent cameraIntent = new Intent(this, CameraActivity.class);
         startActivity(cameraIntent);
     }
 
-    public void startLeaderboardIntent(View view){
+    public void startLeaderboardIntent(View view) {
         Intent leaderboardIntent = new Intent(this, LeaderboardActivity.class);
         startActivity(leaderboardIntent);
     }

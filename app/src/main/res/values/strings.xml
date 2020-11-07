@@ -11,4 +11,10 @@
     <string name="azure_cognitive_services_key">86c674f8fd0e440898b945c554a2c449</string>
     <string name="azure_cognitive_services_endpoint">https://food-classification.cognitiveservices.azure.com/</string>
     <string name="title_activity_leaderboard">LeaderboardActivity</string>
+    <string name="title_activity_main_dashboard">MainDashboard</string>
+    <!--
+    This string is used for square devices and overridden by hello_world in
+    values-round/strings.xml for round devices.
+    -->
+    <string name="hello_world">Hello Square World!</string>
 </resources>

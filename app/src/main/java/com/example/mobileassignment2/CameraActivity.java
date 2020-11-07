@@ -37,6 +37,7 @@ import java.util.UUID;
 
 import java.io.IOException;
 import java.util.Date;
+
 import com.microsoft.azure.cognitiveservices.vision.computervision.*;
 import com.microsoft.azure.cognitiveservices.vision.computervision.implementation.ComputerVisionImpl;
 import com.microsoft.azure.cognitiveservices.vision.computervision.models.*;
@@ -59,7 +60,7 @@ public class CameraActivity extends AppCompatActivity {
 
 
         // Request camera and write permissions
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             // Permission is not granted
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
@@ -74,7 +75,7 @@ public class CameraActivity extends AppCompatActivity {
             }
         }
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)!= PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             // Permission is not granted
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
@@ -90,9 +91,7 @@ public class CameraActivity extends AppCompatActivity {
         }
 
 
-
     }
-
 
 
     /* Create a file for a taken image */
@@ -163,10 +162,10 @@ public class CameraActivity extends AppCompatActivity {
        Send it to Azure for classification
      */
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data){
-        if (requestCode == 100){
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 100) {
 
-            if (resultCode == Activity.RESULT_OK){
+            if (resultCode == Activity.RESULT_OK) {
                 Log.d("requestCode", Integer.toString(requestCode));
                 Log.d("resultCode", Integer.toString(resultCode));
                 galleryAddPic();
@@ -183,11 +182,6 @@ public class CameraActivity extends AppCompatActivity {
         finish();
         //Log.d("Intent data", data.getDataString());
     }
-
-
-
-
-
 
 
     // Analyze the image with the Azure Cognitive SDK
@@ -218,7 +212,6 @@ public class CameraActivity extends AppCompatActivity {
 //
 //
 //    }
-
 
 
 }

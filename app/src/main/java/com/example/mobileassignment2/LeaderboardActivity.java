@@ -52,7 +52,7 @@ public class LeaderboardActivity extends AppCompatActivity {
         RequestQueue queue = Volley.newRequestQueue(this);
 
         String url = "http://" + getString(R.string.host_name) + "/users/get-all-users-scores";
-        JsonArrayRequest jsonRequest =  new JsonArrayRequest
+        JsonArrayRequest jsonRequest = new JsonArrayRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
 
                     @Override
@@ -82,9 +82,9 @@ public class LeaderboardActivity extends AppCompatActivity {
 
     }
 
-    private ArrayList<UserRank> processScoreArray(JSONArray array){
+    private ArrayList<UserRank> processScoreArray(JSONArray array) {
         ArrayList<UserRank> ranks = new ArrayList<>();
-        for (int i = 0; i < array.length(); i++){
+        for (int i = 0; i < array.length(); i++) {
             try {
                 JSONObject j = array.getJSONObject(i);
                 String username = j.getString("name");
@@ -93,7 +93,6 @@ public class LeaderboardActivity extends AppCompatActivity {
 
                 UserRank userRank = new UserRank(username, rank, points);
                 ranks.add(userRank);
-
 
 
             } catch (JSONException e) {

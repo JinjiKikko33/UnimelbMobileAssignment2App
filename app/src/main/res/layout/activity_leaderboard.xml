@@ -56,31 +56,31 @@
             android:id="@+id/rank"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Rank"
-            android:textStyle="bold"
             android:layout_marginLeft="20dp"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:text="Rank"
+            android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/name"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:text="Username"
-            android:textStyle="bold"
+            android:layout_weight="1"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
-            android:id="@+id/name" />
+            android:text="Username"
+            android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/points"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
+            android:layout_marginRight="20dp"
+            android:layout_weight="1"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
             android:text="Points"
-            android:textStyle="bold"
-            android:layout_marginRight="20dp"
-            android:id="@+id/points" />
+            android:textStyle="bold" />
 
 
     </LinearLayout>
