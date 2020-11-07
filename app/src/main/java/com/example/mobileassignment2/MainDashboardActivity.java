@@ -116,6 +116,12 @@ public class MainDashboardActivity extends AppCompatActivity {
         startActivity(leaderboardIntent);
     }
 
+
+    /*
+     * Retrieve the date a user joined from the DB, and calculate the number of days since
+     * Place the number of days since they joined into a TextView
+     *
+     */
     private void updateTodayDate(final TextView days, String email) {
         RequestQueue queue = Volley.newRequestQueue(this);
         String url = "http://" + getString(R.string.host_name) + "/users/date-joined/?email=" + email;
@@ -154,6 +160,10 @@ public class MainDashboardActivity extends AppCompatActivity {
 
     }
 
+    /*
+     * Download a user's current step count from the DB, and inject it into a TextView
+     *
+     */
     private void updateStepCount(final TextView steps, String email) {
         RequestQueue queue = Volley.newRequestQueue(this);
         String url = "http://" + getString(R.string.host_name) + "/users/get-user-step-counts?email=" + email;
@@ -192,6 +202,10 @@ public class MainDashboardActivity extends AppCompatActivity {
 
     }
 
+    /*
+     * Retrieve a user's current score from the DB, and inject into a TextView
+     *
+     */
     private void updateScore(final TextView score, String email) {
         RequestQueue queue = Volley.newRequestQueue(this);
         String url = "http://" + getString(R.string.host_name) + "/users/get-current-score?email=" + email;
@@ -233,6 +247,12 @@ public class MainDashboardActivity extends AppCompatActivity {
     }
 
 
+
+    /*
+     *  Download a user's profile picture asynchronously
+     *  and render it into the ImageView for their profile picture
+     *
+     */
     private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
         ImageView userImage;
 
