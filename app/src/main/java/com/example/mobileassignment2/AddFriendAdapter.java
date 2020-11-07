@@ -76,7 +76,7 @@ public class AddFriendAdapter extends BaseAdapter {
         // download image of potential friend
 
         final ImageView img=viewHolder.userImg;
-        String imageUrl = "http://52.189.254.126:3000/users/photo_url="+listData.get(position).getImgurl();
+        String imageUrl = listData.get(position).getImgurl();
 
         new DownloadImageTask(img).execute(imageUrl);
 
@@ -91,7 +91,7 @@ public class AddFriendAdapter extends BaseAdapter {
             public void onClick(View v) {
 
                 RequestQueue queue = Volley.newRequestQueue(context);
-                String url = String.format("http://52.189.254.126:3000/add-friend-by-id?id=%s&friend_id=%d", userid, fid);
+                String url = String.format("http://52.189.254.126:3000/users/add-friend-by-id?id=%s&friend_id=%d", userid, fid);
 
                 Log.d("request url", url);
 
@@ -99,7 +99,7 @@ public class AddFriendAdapter extends BaseAdapter {
                         new Response.Listener<String>() {
                             @Override
                             public void onResponse(String response) {
-                                String userMessage = response;
+                                String userMessage = "You have added a friend!";
                                 Toast toast = Toast.makeText(context, userMessage, Toast.LENGTH_LONG);
                                 toast.show();
                                 Log.d("Backend response: ", response);
