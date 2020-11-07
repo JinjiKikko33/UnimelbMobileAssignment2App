@@ -4,6 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.DataSetObserver;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,9 +21,16 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import java.io.InputStream;
 import java.util.List;
 
-import static com.example.mobileassignment2.VolleyUtil.IP_;
 
 public class AddFriendAdapter extends BaseAdapter {
 
@@ -62,29 +72,48 @@ public class AddFriendAdapter extends BaseAdapter {
         }else {
             viewHolder= (ViewHolder) convertView.getTag();
         }
+
+        // download image of potential friend
+
         final ImageView img=viewHolder.userImg;
-        VolleyUtil.imageVolley("http://52.189.254.126:3000/users/photo_url="+listData.get(position).getImgurl(), context, new VolleyUtil.ImgCallBack() {
-            @Override
-            public void onSuccess(Bitmap bitmap) {
-                img.setImageBitmap(bitmap);
-            }
-        });
+        String imageUrl = "http://52.189.254.126:3000/users/photo_url="+listData.get(position).getImgurl();
+
+        new DownloadImageTask(img).execute(imageUrl);
+
+
 
 //        viewHolder.userImg.setBackgroundResource(R.mipmap.ic_launcher);
         final int fid = listData.get(position).getFid();
         viewHolder.username.setText(listData.get(position).getFusername());
+        // follow button action
         viewHolder.btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+                RequestQueue queue = Volley.newRequestQueue(context);
+                String url = String.format("http://52.189.254.126:3000/add-friend-by-id?id=%s&friend_id=%d", userid, fid);
 
-                VolleyUtil.goVolley(String.format("http://52.189.254.126:3000/add-friend-by-id?id=%s&friend_id=%d", userid, fid), context,
-                        new VolleyUtil.VolleyCallback() {
+                Log.d("request url", url);
+
+                StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                        new Response.Listener<String>() {
                             @Override
-                            public void onSuccess(String s) {
+                            public void onResponse(String response) {
+                                String userMessage = response;
+                                Toast toast = Toast.makeText(context, userMessage, Toast.LENGTH_LONG);
+                                toast.show();
+                                Log.d("Backend response: ", response);
                                 viewHolder.btnAdd.setText("Followed");
+
                             }
-                        });
+                        }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("Backend response error: ", error.toString());
+                    }
+                });
+                queue.add(stringRequest);
+
             }
         });
         return convertView;
@@ -98,5 +127,37 @@ public class AddFriendAdapter extends BaseAdapter {
 
     }
 
+    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+        ImageView userImage;
+
+        public DownloadImageTask(ImageView userImage) {
+            this.userImage = userImage;
+        }
+
+        @Override
+        protected Bitmap doInBackground(String... urls) {
+            String urldisplay = urls[0];
+            Bitmap icon = null;
+            try {
+                InputStream in = new java.net.URL(urldisplay).openStream();
+                icon = BitmapFactory.decodeStream(in);
+
+            } catch (Exception e) {
+                Log.e("Error", e.getMessage());
+
+            }
+            return icon;
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap result) {
+            userImage.setImageBitmap(result);
+        }
+    }
+
 
 }
+
+
+
+
