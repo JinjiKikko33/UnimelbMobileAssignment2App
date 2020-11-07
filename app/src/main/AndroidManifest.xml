@@ -36,6 +36,7 @@
             android:label="@string/title_activity_leaderboard">
         </activity>
         <activity android:name=".MainDashboardActivity"/>
+        <activity android:name=".HistoryChartActivity"/>
 
         <activity android:name=".CameraActivity" />
         <activity android:name=".CameraLeaderBoardDashboardActivity">

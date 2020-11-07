@@ -93,15 +93,15 @@ public class HistoryChartActivity extends AppCompatActivity {
             }
         }
 
-        LineDataSet dataSet = new LineDataSet(entries, "Label");
+        LineDataSet dataSet = new LineDataSet(entries, "Daily Score");
 
         //to hide right Y and top X border
         YAxis rightYAxis = chart.getAxisRight();
         rightYAxis.setEnabled(false);
         YAxis leftYAxis = chart.getAxisLeft();
-        leftYAxis.setEnabled(false);
+        //leftYAxis.setEnabled(false);
         XAxis topXAxis = chart.getXAxis();
-        topXAxis.setEnabled(false);
+        //topXAxis.setEnabled(false);
 
         XAxis xAxis = chart.getXAxis();
         xAxis.setGranularity(1f); // the smallest interval for x axis is 1
