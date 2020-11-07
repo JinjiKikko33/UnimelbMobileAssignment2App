@@ -32,8 +32,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.example.mobileassignment2.VolleyUtil.IP_;
-
 
 public class AddFriendActivity extends AppCompatActivity {
 
@@ -58,15 +56,42 @@ public class AddFriendActivity extends AppCompatActivity {
         initView();
         mAuth = FirebaseAuth.getInstance();
         final FirebaseUser currentUser = mAuth.getCurrentUser();
-        try {
-            userid = currentUser.getUid();
-        } catch (NullPointerException e) {
-            userid = "";
-        }
-        addFriendAdapter = new AddFriendAdapter(AddFriendActivity.this, listData, userid);
-        searchResultList.setAdapter(addFriendAdapter);
 
-        initListener();
+        // get the user's id from their email by sending the relevant GET request
+        String email = currentUser.getEmail();
+        String url = "http://" + getString(R.string.host_name) + "/users/get-id-from-email/?email=" + email;
+        Log.d("email", email);
+
+        RequestQueue queue = Volley.newRequestQueue(this);
+
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                String userid = null;
+
+                try {
+                    userid = Integer.toString(response.getInt("id"));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                addFriendAdapter = new AddFriendAdapter(AddFriendActivity.this, listData, userid);
+                searchResultList.setAdapter(addFriendAdapter);
+                initListener();
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+            }
+        });
+
+        queue.add(request);
+
+
+
     }
 
     private void initListener() {
@@ -108,15 +133,17 @@ public class AddFriendActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(JSONArray response) {
                     try {
+                        Log.d("result", response.toString());
                         listData.clear();
 
                         for (int i = 0; i < response.length(); i++){
                             JSONObject jsonObject=response.getJSONObject(i);
-                            listData.add(new Friends(jsonObject.getInt("id"),jsonObject.getString("user_name"),jsonObject.getString("imgurl")));
+                            listData.add(new Friends(jsonObject.getInt("id"),jsonObject.getString("name"),jsonObject.getString("photo_url")));
                         }
                         addFriendAdapter.notifyDataSetChanged();
 
                     } catch (Exception e) {
+                        Log.d("ERROR", e.toString());
                         e.printStackTrace();
                     }
                 }
