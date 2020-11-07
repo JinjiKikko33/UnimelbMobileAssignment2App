@@ -50,7 +50,7 @@ public class HistoryChartActivity extends AppCompatActivity {
         // fetch historical scores of current user from the database
         RequestQueue queue = Volley.newRequestQueue(this);
 
-        String url = "http://" + getString(R.string.host_name) + "get-historical-scores?email=" + email;
+        String url = "http://" + getString(R.string.host_name) + "/users/get-historical-scores?email=" + email;
         JsonArrayRequest jsonRequest = new JsonArrayRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
 
