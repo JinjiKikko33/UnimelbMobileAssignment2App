@@ -227,6 +227,7 @@
                 android:orientation="vertical">
 
                 <Button
+                    android:id="@+id/leaderboard_button"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:gravity="center_vertical"
@@ -234,6 +235,16 @@
                     android:paddingLeft="12dp"
                     android:paddingRight="6dp"
                     android:text="View Leaderboard">
+                </Button>
+                <Button
+                    android:id="@+id/chart_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:gravity="center_vertical"
+                    android:onClick="startLeaderBoardIntent"
+                    android:paddingLeft="12dp"
+                    android:paddingRight="6dp"
+                    android:text="View My Chart">
                 </Button>
 
 
