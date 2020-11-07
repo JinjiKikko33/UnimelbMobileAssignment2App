@@ -41,8 +41,15 @@
         <activity android:name=".CameraActivity" />
         <activity android:name=".CameraLeaderBoardDashboardActivity">
         </activity>
-
-
+        <activity android:name=".StepCounterActivity">
+            <!-->
+            <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <-->
+        </activity>
+        <activity android:name=".StepCounterHistoryActivity"/>
         <service
             android:name=".ClassifyImageService"
             android:exported="false" />

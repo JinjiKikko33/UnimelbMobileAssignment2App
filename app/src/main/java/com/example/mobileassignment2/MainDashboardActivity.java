@@ -50,6 +50,7 @@ public class MainDashboardActivity extends AppCompatActivity {
     String username;
     private FirebaseAuth mAuth;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -119,6 +120,11 @@ public class MainDashboardActivity extends AppCompatActivity {
     public void startChartActivityIntent(View view){
         Intent chartIntent = new Intent(this, HistoryChartActivity.class);
         startActivity(chartIntent);
+    }
+
+    public void startStepCounterActvityIntent(View view){
+        Intent stepIntent = new Intent(this, StepCounterActivity.class);
+        startActivity(stepIntent);
     }
 
 
