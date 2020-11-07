@@ -116,6 +116,11 @@ public class MainDashboardActivity extends AppCompatActivity {
         startActivity(leaderboardIntent);
     }
 
+    public void startChartActivityIntent(View view){
+        Intent chartIntent = new Intent(this, HistoryChartActivity.class);
+        startActivity(chartIntent);
+    }
+
 
     /*
      * Retrieve the date a user joined from the DB, and calculate the number of days since

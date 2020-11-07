@@ -241,7 +241,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:gravity="center_vertical"
-                    android:onClick="startLeaderBoardIntent"
+                    android:onClick="startChartActivityIntent"
                     android:paddingLeft="12dp"
                     android:paddingRight="6dp"
                     android:text="View My Chart">
