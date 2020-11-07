@@ -51,7 +51,7 @@ public class AddFriendAdapter extends BaseAdapter {
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-        ViewHolder viewHolder;
+        final ViewHolder viewHolder;
         if (convertView == null){
             convertView = LayoutInflater.from(context).inflate(R.layout.item_add_friend,null);
             viewHolder = new ViewHolder();
@@ -63,7 +63,7 @@ public class AddFriendAdapter extends BaseAdapter {
             viewHolder= (ViewHolder) convertView.getTag();
         }
         final ImageView img=viewHolder.userImg;
-        VolleyUtil.imageVolley("http://"+IP_+":3080/get-user-profile"+listData.get(position).getImgurl(), context, new VolleyUtil.ImgCallBack() {
+        VolleyUtil.imageVolley("http://52.189.254.126:3000/users/photo_url="+listData.get(position).getImgurl(), context, new VolleyUtil.ImgCallBack() {
             @Override
             public void onSuccess(Bitmap bitmap) {
                 img.setImageBitmap(bitmap);
@@ -71,16 +71,18 @@ public class AddFriendAdapter extends BaseAdapter {
         });
 
 //        viewHolder.userImg.setBackgroundResource(R.mipmap.ic_launcher);
+        final int fid = listData.get(position).getFid();
         viewHolder.username.setText(listData.get(position).getFusername());
         viewHolder.btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                VolleyUtil.goVolley("http://" + IP_ + ":3000/user_id=" + userid, context,
+
+
+                VolleyUtil.goVolley(String.format("http://52.189.254.126:3000/add-friend-by-id?id=%s&friend_id=%d", userid, fid), context,
                         new VolleyUtil.VolleyCallback() {
                             @Override
                             public void onSuccess(String s) {
-                                Intent intent = new Intent(context, AddFriendActivity.class);
-                                context.startActivity(intent);
+                                viewHolder.btnAdd.setText("Followed");
                             }
                         });
             }

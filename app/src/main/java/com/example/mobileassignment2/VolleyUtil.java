@@ -72,7 +72,7 @@ public class VolleyUtil {
 
     public static void imageVolley(String url, final Context context1, final ImgCallBack callback){
         RequestQueue requestQueue = Volley.newRequestQueue(context1);
-        //实例ImageRequest，并设置参数，分别为地址，响应成功监听，最大宽、高，图片质量，网络异常监听
+        //imagerequest implementation
         ImageRequest imageRequest = new ImageRequest(url,
                 new Response.Listener<Bitmap>() {
                     @Override

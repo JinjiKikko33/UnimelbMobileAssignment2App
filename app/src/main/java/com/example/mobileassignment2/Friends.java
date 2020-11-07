@@ -6,14 +6,13 @@ public class Friends {
     private String fusername;
     private String imgurl;
 
-    public Friends(Integer fid, String fusername, Integer isonline,String imgurl) {
+    public Friends(int fid, String fusername, String imgurl) {
         this.fid = fid;
         this.fusername = fusername;
         this.imgurl=imgurl;
     }
 
-    public Friends(int id, String username, String imgurl) {
-    }
+
 
     public String getImgurl() {
         return imgurl;

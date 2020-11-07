@@ -15,6 +15,15 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -34,6 +43,8 @@ public class AddFriendActivity extends AppCompatActivity {
     private AddFriendAdapter addFriendAdapter;
     private ListView searchResultList;
     private List<Friends> listData = new ArrayList<Friends>();
+    private FirebaseAuth mAuth;
+
 
 
 
@@ -45,6 +56,15 @@ public class AddFriendActivity extends AppCompatActivity {
 
         // initialize view
         initView();
+        mAuth = FirebaseAuth.getInstance();
+        final FirebaseUser currentUser = mAuth.getCurrentUser();
+        try {
+            userid = currentUser.getUid();
+        } catch (NullPointerException e) {
+            userid = "";
+        }
+        addFriendAdapter = new AddFriendAdapter(AddFriendActivity.this, listData, userid);
+        searchResultList.setAdapter(addFriendAdapter);
 
         initListener();
     }
@@ -79,20 +99,35 @@ public class AddFriendActivity extends AppCompatActivity {
             } catch (java.io.UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
-            VolleyUtil.goVolley("http://" + IP_ + ":3000//users/search-user?user_name=" + name, AddFriendActivity.this,
-                    new VolleyUtil.VolleyCallback() {
-                        @Override
-                        public void onSuccess(String s) throws JSONException {
-                            listData.clear();
-                            JSONArray jsonArray=new JSONArray(s);
-                            for (int i = 0; i < jsonArray.length(); i++){
-                                JSONObject jsonObject=jsonArray.getJSONObject(i);
-                                listData.add(new Friends(jsonObject.getInt("id"),jsonObject.getString("username"),jsonObject.getString("imgurl")));
-                            }
-                            addFriendAdapter.notifyDataSetChanged();
-                        }
 
-                    });
+            // request a list of possible users
+            RequestQueue queue = Volley.newRequestQueue(this);
+            String url = "http://52.189.254.126:3000/users/search-user?user_name=" + name;
+
+            JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+                @Override
+                public void onResponse(JSONArray response) {
+                    try {
+                        listData.clear();
+
+                        for (int i = 0; i < response.length(); i++){
+                            JSONObject jsonObject=response.getJSONObject(i);
+                            listData.add(new Friends(jsonObject.getInt("id"),jsonObject.getString("user_name"),jsonObject.getString("imgurl")));
+                        }
+                        addFriendAdapter.notifyDataSetChanged();
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    error.printStackTrace();
+                }
+            });
+            queue.add(request);
+
         }
     }
 
@@ -100,9 +135,7 @@ public class AddFriendActivity extends AppCompatActivity {
     private void initView() {
         bt_add_search = (Button) findViewById(R.id.bt_add_search);
         et_add_usrname = (EditText) findViewById(R.id.et_add_usrname);
-        userid = getIntent().getExtras().getString("user_id");
-        addFriendAdapter = new AddFriendAdapter(AddFriendActivity.this, listData, userid);
-        searchResultList.setAdapter(addFriendAdapter);
+        searchResultList=findViewById(R.id.list_add_friends);
     }
 
 
