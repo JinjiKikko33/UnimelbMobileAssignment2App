@@ -81,11 +81,12 @@ public class SignInActivity extends AppCompatActivity {
                     // TODO: update new record in users database when the user logs in for the first time
                     String email = account.getEmail();
                     String name = account.getDisplayName();
+                    String imageUrl = account.getPhotoUrl().toString();
 
                     Log.d("email:", email);
                     Log.d("name:", name);
 
-                    CheckUserExistsAndAddUserToDatabase(email, name);
+                    CheckUserExistsAndAddUserToDatabase(email, name, imageUrl);
 
 
                     Log.d("SignInActivity", "firebaseAuthWithGoogle:" + account.getId());
@@ -101,11 +102,11 @@ public class SignInActivity extends AppCompatActivity {
         }
     }
 
-    private void CheckUserExistsAndAddUserToDatabase(String email, String name) {
+    private void CheckUserExistsAndAddUserToDatabase(String email, String name, String imageUrl) {
 
         RequestQueue queue = Volley.newRequestQueue(this);
         String url = "http://" + getString(R.string.host_name)
-                + String.format("/users/create?email=%s&name=%s", email, name);
+                + String.format("/users/ph?email=%s&name=%s&photo_url=%s", email, name, imageUrl);
 
         Log.d("request url", url);
 

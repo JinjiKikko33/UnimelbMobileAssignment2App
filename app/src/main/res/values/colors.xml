@@ -9,6 +9,8 @@
 <color name="YellowGreen">#f3ffbd</color>
 <color name="Red">#ff1654</color>
 <color name="White">#FAF8F8</color>
-<color name="black">#000000</color>
-<color name="gray">#F3F5F7</color>
+<color name="black">#212121</color>
+<color name="grey">#EEEEEE</color>
+<color name="main">#32E0C4</color>
+<color name="mainDark">#0D7377</color>
 </resources>

@@ -50,7 +50,7 @@ public class HistoryChartActivity extends AppCompatActivity {
         // fetch historical scores of current user from the database
         RequestQueue queue = Volley.newRequestQueue(this);
 
-        String url = "http://" + getString(R.string.host_name) + "get-historical-scores?email=" + email;
+        String url = "http://" + getString(R.string.host_name) + "/users/get-historical-scores?email=" + email;
         JsonArrayRequest jsonRequest = new JsonArrayRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
 
@@ -93,15 +93,15 @@ public class HistoryChartActivity extends AppCompatActivity {
             }
         }
 
-        LineDataSet dataSet = new LineDataSet(entries, "Label");
+        LineDataSet dataSet = new LineDataSet(entries, "Daily Score");
 
         //to hide right Y and top X border
         YAxis rightYAxis = chart.getAxisRight();
         rightYAxis.setEnabled(false);
-        YAxis leftYAxis = chart.getAxisLeft();
-        leftYAxis.setEnabled(false);
-        XAxis topXAxis = chart.getXAxis();
-        topXAxis.setEnabled(false);
+        // YAxis leftYAxis = chart.getAxisLeft();
+        // leftYAxis.setEnabled(false);
+        // XAxis topXAxis = chart.getXAxis();
+        // topXAxis.setEnabled(false);
 
         XAxis xAxis = chart.getXAxis();
         xAxis.setGranularity(1f); // the smallest interval for x axis is 1

@@ -10,6 +10,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -41,6 +42,7 @@ import java.util.Locale;
 public class MainDashboardActivity extends AppCompatActivity {
 
     ImageButton cameraButton;
+    Button signout_button;
     TextView today;
     TextView name;
     TextView days;
@@ -49,6 +51,7 @@ public class MainDashboardActivity extends AppCompatActivity {
     ImageView imageUserIcon;
     String username;
     private FirebaseAuth mAuth;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +63,7 @@ public class MainDashboardActivity extends AppCompatActivity {
         final FirebaseUser currentUser = mAuth.getCurrentUser();
 
         cameraButton = findViewById(R.id.cameraButton);
+        signout_button = findViewById(R.id.signout_button);
         today = findViewById(R.id.text_today);
         name = findViewById(R.id.text_name);
         imageUserIcon = findViewById(R.id.image_user_icon);
@@ -116,6 +120,26 @@ public class MainDashboardActivity extends AppCompatActivity {
         startActivity(leaderboardIntent);
     }
 
+    public void startChartActivityIntent(View view) {
+        Intent chartIntent = new Intent(this, HistoryChartActivity.class);
+        startActivity(chartIntent);
+    }
+
+    public void startStepCounterActvityIntent(View view) {
+        Intent stepIntent = new Intent(this, StepCounterActivity.class);
+        startActivity(stepIntent);
+    }
+
+    public void signout_onclick(View view) {
+        mAuth.signOut();
+    }
+
+
+    /*
+     * Retrieve the date a user joined from the DB, and calculate the number of days since
+     * Place the number of days since they joined into a TextView
+     *
+     */
     private void updateTodayDate(final TextView days, String email) {
         RequestQueue queue = Volley.newRequestQueue(this);
         String url = "http://" + getString(R.string.host_name) + "/users/date-joined/?email=" + email;
@@ -154,6 +178,10 @@ public class MainDashboardActivity extends AppCompatActivity {
 
     }
 
+    /*
+     * Download a user's current step count from the DB, and inject it into a TextView
+     *
+     */
     private void updateStepCount(final TextView steps, String email) {
         RequestQueue queue = Volley.newRequestQueue(this);
         String url = "http://" + getString(R.string.host_name) + "/users/get-user-step-counts?email=" + email;
@@ -164,6 +192,10 @@ public class MainDashboardActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONArray response) {
                         try {
+                            if (response.length() == 0) {
+                                String currentScore = " 0 steps today";
+                                steps.setText(currentScore);
+                            }
                             JSONObject j = response.getJSONObject(0);
                             String currentScore = Integer.toString(j.getInt("step_count")) + " steps today";
                             steps.setText(currentScore);
@@ -188,6 +220,10 @@ public class MainDashboardActivity extends AppCompatActivity {
 
     }
 
+    /*
+     * Retrieve a user's current score from the DB, and inject into a TextView
+     *
+     */
     private void updateScore(final TextView score, String email) {
         RequestQueue queue = Volley.newRequestQueue(this);
         String url = "http://" + getString(R.string.host_name) + "/users/get-current-score?email=" + email;
@@ -198,9 +234,15 @@ public class MainDashboardActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONArray response) {
                         try {
-                            JSONObject j = response.getJSONObject(0);
-                            String currentScore = Integer.toString(j.getInt("score")) + " pts";
-                            score.setText(currentScore);
+                            if (response.length() == 0) {
+                                String currentScore = "0 pts";
+                                score.setText(currentScore);
+                            } else {
+                                JSONObject j = response.getJSONObject(0);
+                                String currentScore = Integer.toString(j.getInt("score")) + " pts";
+                                score.setText(currentScore);
+                            }
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                             return;
@@ -222,6 +264,11 @@ public class MainDashboardActivity extends AppCompatActivity {
     }
 
 
+    /*
+     *  Download a user's profile picture asynchronously
+     *  and render it into the ImageView for their profile picture
+     *
+     */
     private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
         ImageView userImage;
 
