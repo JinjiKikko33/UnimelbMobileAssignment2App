@@ -164,6 +164,10 @@ public class MainDashboardActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONArray response) {
                         try {
+                            if (response.length() == 0){
+                                String currentScore = " 0 steps today";
+                                steps.setText(currentScore);
+                            }
                             JSONObject j = response.getJSONObject(0);
                             String currentScore = Integer.toString(j.getInt("step_count")) + " steps today";
                             steps.setText(currentScore);
@@ -198,9 +202,16 @@ public class MainDashboardActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONArray response) {
                         try {
-                            JSONObject j = response.getJSONObject(0);
-                            String currentScore = Integer.toString(j.getInt("score")) + " pts";
-                            score.setText(currentScore);
+                            if (response.length() == 0){
+                                String currentScore = "0 pts";
+                                score.setText(currentScore);
+                            }
+                            else {
+                                JSONObject j = response.getJSONObject(0);
+                                String currentScore = Integer.toString(j.getInt("score")) + " pts";
+                                score.setText(currentScore);
+                            }
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                             return;
