@@ -8,21 +8,53 @@
     android:padding="40dp"
     tools:context=".SignInActivity">
 
+
     <ImageView
-        android:id="@+id/welcome_imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="250dp"
+        android:layout_width="150dp"
+        android:layout_marginTop="124dp"
+        android:contentDescription="Sign in picture"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="110dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_welcome" />
+        app:srcCompat="@drawable/ic_coupons"
+        android:layout_height="150dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_getfitter"
+        android:fontFamily="@font/avenir_heavy"
+        android:gravity="center"
+        android:paddingTop="13dp"
+        android:paddingBottom="13dp"
+        android:text="START UP"
+        android:textColor="@color/main"
+        android:textSize="37sp"
+        tools:layout_editor_absoluteX="40dp"
+        tools:layout_editor_absoluteY="300dp"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_getfitter"
+        android:fontFamily="@font/avenir_heavy"
+        android:gravity="center"
+        android:paddingTop="13dp"
+        android:paddingBottom="13dp"
+        android:text="Transforming your body, changing your lifestyle, delivering results."
+        android:textColor="@color/subtxtcolor"
+        android:textSize="16sp"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="40dp"
+        tools:layout_editor_absoluteY="380dp" />
 
     <Button
         android:id="@+id/sign_in_btn"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="76dp"
         android:background="#fff"
         android:drawableStart="@drawable/ic_google"
         android:paddingStart="40dp"
@@ -32,7 +64,6 @@
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

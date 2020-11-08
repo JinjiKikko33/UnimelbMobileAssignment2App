@@ -63,7 +63,7 @@ public class MainDashboardActivity extends AppCompatActivity {
         final FirebaseUser currentUser = mAuth.getCurrentUser();
 
         cameraButton = findViewById(R.id.cameraButton);
-        signout_button = findViewById(R.id.signout_button);
+        //signout_button = findViewById(R.id.signout_button);
         today = findViewById(R.id.text_today);
         name = findViewById(R.id.text_name);
         imageUserIcon = findViewById(R.id.image_user_icon);

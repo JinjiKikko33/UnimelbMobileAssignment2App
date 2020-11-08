@@ -6,11 +6,25 @@
     android:layout_height="match_parent"
     tools:context=".LeaderboardActivity">
 
+    <TextView
+        android:id="@+id/tv_leaderboard"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_weight="1"
+        android:fontFamily="@font/avenir_heavy"
+        android:background="@color/main"
+        android:paddingLeft="15dp"
+        android:paddingTop="7dp"
+        android:text="Leaderboard"
+        android:textColor="@color/White"
+        android:textSize="34sp"
+        tools:ignore="MissingConstraints" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list_recycler_view"
         android:layout_width="345dp"
         android:layout_height="match_parent"
-        android:layout_marginTop="204dp"
+        android:layout_marginTop="216dp"
         android:scrollbars="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -26,7 +40,7 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.363"
+        app:layout_constraintVertical_bias="0.724"
         app:srcCompat="@mipmap/trophy" />
 
     <TextView
@@ -58,7 +72,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:layout_weight="1"
-            android:text="Rank"
+            android:text="        Rank"
             android:textStyle="bold" />
 
         <TextView
@@ -68,7 +82,7 @@
             android:layout_weight="1"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
-            android:text="Username"
+            android:text="   Username"
             android:textStyle="bold" />
 
         <TextView
@@ -79,7 +93,7 @@
             android:layout_weight="1"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
-            android:text="Points"
+            android:text="  Points"
             android:textStyle="bold" />
 
 

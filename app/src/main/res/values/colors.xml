@@ -13,4 +13,5 @@
 <color name="grey">#EEEEEE</color>
 <color name="main">#32E0C4</color>
 <color name="mainDark">#0D7377</color>
+    <color name="subtxtcolor">#a4a2a2</color>
 </resources>
