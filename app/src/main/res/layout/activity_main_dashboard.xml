@@ -129,7 +129,7 @@
             <LinearLayout
                 android:id="@+id/layout_today_diet"
                 android:layout_width="match_parent"
-                android:layout_height="432dp"
+                android:layout_height="317dp"
                 android:layout_below="@id/layout_step_cal"
                 android:background="@color/White"
                 android:orientation="vertical">
